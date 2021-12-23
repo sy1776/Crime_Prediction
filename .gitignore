@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.db
+crime.sql.txt
+.idea/
+*.png
+result.ods
+*MODEL
+ASP*
