@@ -1,10 +1,15 @@
-import pandas as pd
-import sqlite3
 from sqlalchemy import create_engine
 from sqlite3 import Error
+from sklearn.metrics import confusion_matrix
+import pandas as pd
+import sqlite3
 import pickle
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 MODEL_NAME = {0:'LR_MODEL', 1:'DT_GINI_MODEL', 2:'KNN_MODEL', 3:'RF_MODEL', 4:'DT_IG_MODEL', 5:'NN_MODEL'}
+CLASSIFIERS = ['Logistic_Regression', 'Decision_Tree', 'KNN', 'Random_Forest']
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -81,8 +86,56 @@ def load_model(model_id):
     loaded_model = pickle.load(open(MODEL_NAME[model_id], 'rb'))
     return loaded_model
 
-
 def read_csv(filepath):
     # Columns in events.csv - patient_id,event_id,event_description,timestamp,value
     neighborhood_df = pd.read_csv(filepath)
     return neighborhood_df
+
+def plot_correlation(df_cor):
+    # Using Pearson Correlation
+    title = "correlation"
+    plt.figure(figsize=(15, 10))
+    cor = df_cor.corr()
+    sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
+    plt.title(title)
+    plt.savefig(title)
+    plt.close()
+
+def plot_cm(classifierName, Y_pred, Y_true):
+    label = ['AGG ASSAULT', 'AUTO THEFT', 'BURGLARY', 'HOMICIDE', 'LARCENY', 'MANSLAUGHTER', 'ROBBERY']
+    title = "Confusion Matrix of " + classifierName
+    cm = confusion_matrix(Y_true, Y_pred)
+    plt.figure(figsize=(8,4))
+    plt.rcParams.update({'font.size': 7})
+    plt.title(title)
+    sns.heatmap(cm, annot=True, cmap=plt.cm.Reds, fmt="d", xticklabels=label, yticklabels=label)  # annot=True to annotate cells
+    plt.savefig(title)
+    plt.close()
+
+def plot_grouped_bar(score):
+    length = len(CLASSIFIERS)
+    title = "Classification Score"
+    width = 0.15  # the width of the bars
+    # Set position of bar on X axis
+    r1 = np.arange(length)
+    r2 = [x + width for x in r1]
+    r3 = [x + width for x in r2]
+    r4 = [x + width for x in r3]
+    np_score = np.array(score)
+
+    plt.rcParams.update({'font.size': 8})
+    plt.figure(figsize=(8, 4))
+
+    plt.bar(r1,  np_score[:, 0], width=width, edgecolor='white', label='Accuracy')
+    plt.bar(r2,  np_score[:, 1], width=width, edgecolor='white', label='Precision')
+    plt.bar(r3,  np_score[:, 2], width=width, edgecolor='white', label='Recall')
+    plt.bar(r4,  np_score[:, 3], width=width, edgecolor='white', label='F1-score')
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    plt.title(title)
+    plt.ylabel('Scores')
+    plt.xticks([r + width for r in range(length)], CLASSIFIERS)
+    plt.legend(loc='best')
+
+    plt.savefig(title)
+    plt.close()

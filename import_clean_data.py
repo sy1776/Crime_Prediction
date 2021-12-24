@@ -63,6 +63,7 @@ def clean_data():
 
     # Remove undefined time_of_day
     df1 = df1[df1.Time_of_day != 'Undefined']
+    df1 = df1.loc[df1['Time_of_day'] != 'Undefined']
 
     def year(s):
         return int(s['Occur_Date'][:4])
@@ -115,4 +116,5 @@ def run_import_clean():
 
     duration = time.time() - start_time
     if DISPLAY:
+        print("")
         print("import_clean_data.run_import_clean()::End= %s, Duration= %f" % (time.ctime(), duration))
