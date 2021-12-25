@@ -25,6 +25,7 @@
   2) Run a wrapper script, "main.py" like this - "python main.py"
      It will execute below scripts in following order:
       import_clean_data.py
+      manipulate_data.py 
       exp_smoothing_model.py
       ml_models.py
       predict.py
