@@ -5,6 +5,8 @@
      a. main.py - wrapper script to call and execute other scripts.
      b. import_clean_data.py - import the data from csv file into a table, crime_raw in sqlite database
         It then cleans and transforms the data from crime_raw into crime_mod table.
+     c. manipulate_data.py - creates the train data consisting of features that matters from crime_mod table. Transforms categorical values
+        into numerical values that will be fed into ML models. 
      c. exp_smoothing_model.py - performs an exponential smoothing on the data from crime_mod table and writes output to database.
      d. ml_models.py - creates a feature data from crime_mod and trains the data with Machine Learning classifiers and then,
         trained models are saved into the same folder and output of classification score is saved to database.
@@ -14,9 +16,9 @@
 2. INSTALLATION
   System Requirement: following libraries are needed for python codes: Panda, Numpy, seaborn, matplotlib, scikit-learn, statsmodels.
   1) Go to CODE folder.
-  2) Download 2 data files, "COBRA-2019" and "COBRA-2009-2018" from below Atlanta police website:
+  2) Download the file, "COBRA-2009-2019" from below Atlanta police website:
      http://www.atlantapd.org/i-want-to/crime-data-downloads
-  3) Merge the files from step b into one single file, "COBRA-2009-2019.csv" and remove duplicates using a tool like OpenRefine.
+  3) Remove duplicates using a tool like OpenRefine.
 
 3. EXECUTION
   1) Ensure that data file, "COBRA-2009-2019.csv" is in the same folder
