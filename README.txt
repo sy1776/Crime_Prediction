@@ -15,10 +15,14 @@
 
 2. INSTALLATION
   System Requirement: following libraries are needed for python codes: Panda, Numpy, seaborn, matplotlib, scikit-learn, statsmodels.
-  1) Go to CODE folder.
-  2) Download the file, "COBRA-2009-2019" from below Atlanta police website:
+  The code was developed and tested with Python 3.7 or higher.
+  a.  Clone the code
+  
+  If data file, "COBRA-2009-2019" is not found in the repository, please perform below:
+  1) Download the file, "COBRA-2009-2019" from below Atlanta police website:
      http://www.atlantapd.org/i-want-to/crime-data-downloads
-  3) Remove duplicates using a tool like OpenRefine.
+  2) Remove duplicates using a tool like OpenRefine.
+ 
 
 3. EXECUTION
   1) Ensure that data file, "COBRA-2009-2019.csv" is in the same folder
