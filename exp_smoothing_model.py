@@ -10,7 +10,7 @@ DISPLAY = True
 
 def run_es_model():
     database_file = 'Project.db'
-    tbname_crime_mod = 'Crime_MOD'
+    tbname_crime_mod = 'crime_mod'
 
     start_time = time.time()
     if DISPLAY:

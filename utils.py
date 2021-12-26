@@ -87,9 +87,8 @@ def load_model(model_id):
     return loaded_model
 
 def read_csv(filepath):
-    # Columns in events.csv - patient_id,event_id,event_description,timestamp,value
-    neighborhood_df = pd.read_csv(filepath)
-    return neighborhood_df
+    df = pd.read_csv(filepath)
+    return df
 
 def plot_correlation(df_cor):
     # Using Pearson Correlation

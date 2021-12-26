@@ -34,14 +34,16 @@ def create_features(crime):
                                'MANSLAUGHTER', 'ROBBERY-COMMERCIAL', 'ROBBERY-PEDESTRIAN', 'ROBBERY-RESIDENCE']
                }
     time_of_day_map = {'time_of_day_id': [0, 1, 2, 3],
-                       'Time_of_day': ['Early Morning', 'Morning', 'Afternoon', 'Evening'] #49,735 records for Early_Morning is disregarded. Total recs: 272,569 vs 322,256
-                       #'Time_of_day': ['Early_Morning', 'Morning', 'Afternoon', 'Evening']
+                       #'Time_of_day': ['Early Morning', 'Morning', 'Afternoon', 'Evening'] #49,735 records for Early_Morning is disregarded. Total recs: 272,569 vs 322,256
+                       'Time_of_day': ['Early_Morning', 'Morning', 'Afternoon', 'Evening']
                        }
     if VERBOSE:
         print(" ")
         print("Before manipulating, total instances and features: ", crime.shape)
         print("Original DF = ")
         print(crime.head(20))
+        print("Unique crime type = ", crime['UCR_Literal'].value_counts())
+        print("Unique Time_of_day = ", crime['Time_of_day'].value_counts())
     # Create dataframes with a map data and merge them
     df_type_map = pd.DataFrame(type_map)
     df_time_map = pd.DataFrame(time_of_day_map)
@@ -88,16 +90,104 @@ def create_features(crime):
         print("Feature data = ")
         print(df_ml_data.head(20))
 
-    return df_ml_data
+    newDF = encode_categorical_data(df_new)
+    return newDF
+
+def encode_categorical_data(df):
+    categorical_columns = df[['Occur_Year', 'Occur_Month', 'day_of_week_id', 'time_of_day_id', 'zone']]
+    encodedDF = pd.get_dummies(categorical_columns)
+    newDF = pd.concat([encodedDF, df['crime_type_id']], axis=1)
+    if VERBOSE:
+        print(" ")
+        print("encodedDF data, total instances and features: ", encodedDF.shape)
+        print("encodedDF data = ")
+        print(encodedDF.head(20))
+    return newDF
+
+def transform_clean_data(db_file, tbname_crime_mod, df_raw):
+    #Remove a first record that is basically a header of raw file
+    df = df_raw[1:len(df_raw)]
+    print("df.head(2) = ", df.head(2))
+
+    print("Before filtering, total instances = ", df.shape[0])
+
+    # Create a feature, 'Time_of_day' using 'Occur_time'
+    df['Time_of_day'] = df.apply(timeOfDay, axis=1)
+
+    # Remove undefined time_of_day
+    df = df[df.Time_of_day != 'Undefined']
+    print("after filtering 'Undefined' time of day, total instances = ", df.shape[0])
+
+    # Create a feature, 'Occur_year' and 'Occur_month' using 'Occur_date'
+    df["Occur_Year"] = df.apply(year, axis=1)
+    df["Occur_Month"] = df.apply(month, axis=1)
+
+    def gen_crime_type(s):
+        if "LARCENY" in s['UCR_Literal']:
+            return "LARCENY"
+        elif "BURGLARY" in s['UCR_Literal']:
+            return "BURGLARY"
+        elif "ROBBERY" in s['UCR_Literal']:
+            return "ROBBERY"
+        elif s['UCR_Literal'] == "HOMICIDE" or s['UCR_Literal'] == "MANSLAUGHTER":
+            return "HOMICIDE"
+        elif s['UCR_Literal'] == "AUTO THEFT":
+            return "AUTO_THEFT"
+        elif s['UCR_Literal'] == "AGG ASSAULT":
+            return "AGG_ASSAULT"
+        else:
+            return s['UCR_Literal']
+
+    df1['Zone'] = df1['Beat'].astype(str).str[0]
+    df1["Crime_type"] = df1.apply(gen_crime_type, axis=1)
+
+    # filter case before 2009, blank crime type, blank neighborhood
+    df1 = df1[df1.Occur_Year > 2008]
+    print("After filtering a year less than 2008 = ", df1.shape)
+    df1 = df1[df1.Crime_type != '']
+    print("After filtering a crime type = ", df1.shape)
+    df1 = df1[df1.Neighborhood != '']
+    print("After filtering a neighborhood = ", df1.shape)
+
+    # Convert Occur_Date to datetime
+    df1["Occur_Date"] = pd.to_datetime(df1["Occur_Date"], format='%Y-%m-%d', errors='ignore')
+    df1["Occur_Date"].dtype
+
+    write_to_db(db_file, df1, tbname_crime_mod, True)
+
+def timeOfDay(c):
+    if type(c['Occur_Time']) == int:
+        if 0 <= c['Occur_Time'] < 600:
+            return 'Early_Morning'
+        elif 600 <= c['Occur_Time'] < 1200:
+            return 'Morning'
+        elif 1200 <= c['Occur_Time'] < 1800:
+            return 'Afternoon'
+        elif 1800 <= c['Occur_Time'] <= 2359:
+            return 'Evening'
+        else:
+            return 'Undefined'
+    else:
+        return 'Undefined'
+
+def year(s):
+    return int(s['Occur_Date'][:4])
+
+def month(s):
+    return int(s['Occur_Date'][5:7])
 
 def run_manipulate_data():
     database_file = 'Project.db'
-    tbname_crime_mod = 'Crime_MOD'
+    tbname_crime_raw = 'crime_raw'
+    tbname_crime_mod = 'crime_mod'
     tbname_feature = 'ML_FEATURE'
     start_time = time.time()
     if DISPLAY:
         print("manipulate_data.run_manipulate_data()::Start = %s" % (time.ctime()))
 
+    # Transform and clean data. Time_of_day and crime_type
+    df_crime_raw = read_sql(database_file, tbname_crime_raw)
+    transform_clean_data(database_file, tbname_crime_mod, df_crime_raw)
     # in order for fast-processing, check if feature data is created in the db. If so, skip creating the feature
     # load the feature data from db directly and perform ML
     if (not exists_table(database_file, tbname_feature)):

@@ -15,7 +15,7 @@ def main():
         print("")
 
     run_import_clean()
-    run_manipulate_data()
+    #run_manipulate_data()
     #run_es_model()
     #run_ml_models()
     #run_preidct()
