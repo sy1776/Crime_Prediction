@@ -10,7 +10,7 @@ Fortunately, there are numerous police departments in America that provides the 
 * Data Cleaning: Removed duplicates via OpenRefine. Total number came down to 334,938.
                  Filtered incomplete crime incidnets (ex: blank neighborhood, crime occurred year=1926) via <tt>manipulate_data.py</tt> using pandas lib. 
                  
-* Analysis/Visualization: Visualization like correlation, confusion matrix, et done via utils.py using matplotlib and seaborn libs. 
+* Analysis/Visualization: Visualization like correlation, confusion matrix, etc done via utils.py using matplotlib and seaborn libs. 
                           Analysis done via <tt>manipulate_data.py</tt> using pandas lib. 
                           
 * Feature Engineering/Tranformation: Couple of runs with original crime data on different machine learning classifiers scored
@@ -33,7 +33,7 @@ Fortunately, there are numerous police departments in America that provides the 
 * Run ML Models: Two different Decision Trees (Gini Index, Information Gain), K-NN, Logistic Regression were performed via <tt>ml_models.py</tt> using scikit-learn lib.
 
 Python code, <tt>import_data.py</tt> which is a first module that gets executed will import the raw data into 'crime_raw' table in the sqlite database.
-After cleaning data and data engineering/transforming, modified data will be written to 'crime_mod' and 'ml_feature'.
+After cleaning data and data engineering/transforming, modified data will be written to 'crime_mod' and 'ml_feature' tables.
 
 Note that SQLite library does not need to be installed on the machine for above codes to be run.
 
