@@ -8,27 +8,26 @@ Fortunately, there are numerous police departments in America that provides the 
 * Data Collection: Downloaded crime incidents for 10 years, 2009 - 2019. Total 343K incidents. To be exact: 342,915 records.
 
 * Data Cleaning: Removed duplicates via OpenRefine. Total number came down to 334,938.
-                 Filtered incomplete crime incidnets (ex: blank neighborhood, crime occurred year=1926) via manipulate_data.py using pandas lib. 
+                 Filtered incomplete crime incidnets (ex: blank neighborhood, crime occurred year=1926) via <tt>manipulate_data.py</tt> using pandas lib. 
                  
 * Analysis/Visualization: Visualization like correlation, confusion matrix, et done via utils.py using matplotlib and seaborn libs. 
-                          Analysis done via manipulate_data.py using pandas lib. 
+                          Analysis done via <tt>manipulate_data.py</tt> using pandas lib. 
                           
 * Feature Engineering/Tranformation: Couple of runs with original crime data on different machine learning classifiers scored
 				      below 50% accuracy which is very low. 
 				      So, picked features that mattered. crime occur date, neigborhood/beat, and crime types and 
 				      following methods were implemented:
 				      				      
-				      1) Grouped 11 crime types into 6 categories. For example, ‘BURGLARY-NONRES’ and ‘BURGLARY-RESIDENCE’ were
-					 merged into ‘BURGLARY’. This has become the label.
-					 
-				      2) Instead of using 244 neighborhoods as location attribute, explored it to use 6 zones City of Atlanta 
-				         logically divided for their patrolling area. It turns out that ‘Beat’ code could be used to represent 6 numeric zones. 
-				         So, converted it to 6 zones.
+				      1. Grouped 11 crime types into 6 categories. For example, ‘BURGLARY-NONRES’ and ‘BURGLARY-RESIDENCE’  
+				         were merged into ‘BURGLARY’. This has become the label.  
+				      2. Instead of using 244 neighborhoods as location attribute, explored it to use 6 zones  
+				         City of Atlanta logically divided for their patrolling area. It turns out that ‘Beat’ code  
+				         could be used to represent 6 numeric zones. So, converted it to 6 zones.  
 				         
-				      3) Crime occur date is broken into year, month, day of week (Monday - Sunday), and time of day id 
-				         representing 4 different day, early morning to evening
+				      3. Crime occur date is broken into year, month, day of week (Monday - Sunday), and time of day id  
+				         representing 4 different day, early morning to evening  
 				      
-				      4) All features in above #2 and #3 were converted into indicator variables from categorical variables.
+				      4. All features in above #2 and #3 were converted into indicator variables from categorical variables.  
 				         
 				      
 * Run ML Models: Two different Decision Trees (Gini Index, Information Gain), K-NN, Logistic Regression were performed via ml_models.py using scikit-learn lib.
