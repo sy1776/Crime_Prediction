@@ -16,8 +16,7 @@ Fortunately, there are numerous police departments in America that provides the 
 * Feature Engineering/Tranformation: Couple of runs with original crime data on different machine learning classifiers scored
 				      below 50% accuracy which is very low. 
 				      So, picked features that mattered. crime occur date, neigborhood/beat, and crime types and 
-				      following methods were implemented:
-				      				      
+				      following methods were implemented:  
 				      1. Grouped 11 crime types into 6 categories. For example, ‘BURGLARY-NONRES’ and ‘BURGLARY-RESIDENCE’  
 				         were merged into ‘BURGLARY’. This has become the label.  
 				      2. Instead of using 244 neighborhoods as location attribute, explored it to use 6 zones  
@@ -30,7 +29,7 @@ Fortunately, there are numerous police departments in America that provides the 
 				      4. All features in above #2 and #3 were converted into indicator variables from categorical variables.  
 				         
 				      
-* Run ML Models: Two different Decision Trees (Gini Index, Information Gain), K-NN, Logistic Regression were performed via ml_models.py using scikit-learn lib.
+* Run ML Models: Two different Decision Trees (Gini Index, Information Gain), K-NN, Logistic Regression were performed via <tt>ml_models.py</tt> using scikit-learn lib.
 
 Python code, import_data.py which is a first module that gets executed will import the raw data into 'crime_raw' table in the sqlite database.
 After cleaning data and data engineering/transforming, modified data will be written to 'crime_mod' and 'ml_feature'.
