@@ -34,23 +34,14 @@ def import_data():
             cursor.execute(query, data)
     conn.commit()
 
-    """
-    df = pd.read_csv("COBRA-2009-2019.csv", header=None, low_memory=False)
-    # Remove Header
-    print("df.shape = ", df.shape)
-    print("df1.head(2) = ", df.head(2))
-    write_to_db(database_file, df, tbname_crime_raw, True)
-    """
-
-def run_import_clean():
+def run_import():
     start_time = time.time()
     if DISPLAY:
-        print("import_clean_data.run_import_clean()::Start = %s" % (time.ctime()) )
+        print("import_clean_data.run_import()::Start = %s" % (time.ctime()) )
 
     import_data()
-    clean_data()
 
     duration = time.time() - start_time
     if DISPLAY:
         print("")
-        print("import_clean_data.run_import_clean()::End= %s, Duration= %f" % (time.ctime(), duration))
+        print("import_clean_data.run_import()::End= %s, Duration= %f" % (time.ctime(), duration))

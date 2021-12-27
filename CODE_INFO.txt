@@ -3,9 +3,9 @@
   1) Python codes - there are 5 Python scripts and each scripts are described below in detail. Their job essentially is to import the data
      from the file and performs various algorithms and saves output to database.
      a. main.py - wrapper script to call and execute other scripts.
-     b. import_clean_data.py - import the data from csv file into a table, crime_raw in sqlite database
-        It then cleans and transforms the data from crime_raw into crime_mod table.
-     c. manipulate_data.py - creates the train data consisting of features that matters from crime_mod table. Transforms categorical values
+     b. import_data.py - import the data from csv file into a table, crime_raw in sqlite database.
+     c. manipulate_data.py - cleans and transforms the data from crime_raw table.
+        creates the train data consisting of features that matters from crime_mod table. Transforms categorical values
         into numerical values that will be fed into ML models. 
      c. exp_smoothing_model.py - performs an exponential smoothing on the data from crime_mod table and writes output to database.
      d. ml_models.py - creates a feature data from crime_mod and trains the data with Machine Learning classifiers and then,
@@ -28,11 +28,8 @@
   1) Ensure that data file, "COBRA-2009-2019.csv" is in the same folder
   2) Run a wrapper script, "main.py" like this - "python main.py"
      It will execute below scripts in following order:
-      import_clean_data.py
+      import_data.py
       manipulate_data.py 
       exp_smoothing_model.py
       ml_models.py
       predict.py
-
-4. DEMO VIDEO
-   https://youtu.be/AgBzL1G6rII

@@ -18,7 +18,7 @@ import numpy as np
 #pd.set_option('display.max_columns', 20)
 CLASSIFIERS = ['Logistic_Regression', 'Decision_Tree', 'KNN', 'Random_Forest']
 RANDOM_STATE = 0
-VERBOSE = False
+VERBOSE = True
 DISPLAY = True
 
 def logistic_regression_pred(X_train, Y_train, X_test):
@@ -124,13 +124,6 @@ def run_ml_models():
     start_time = time.time()
     if DISPLAY:
         print("models.run_ml_models()::Start = %s" % (time.ctime()) )
-
-    #in order for fast-processing, check if feature data is created in the db. If so, skip creating the feature
-    #load the feature data from db directly and perform ML
-    #if (not exists_table(database_file, tbname_feature)):
-    #    df_crime = read_sql(database_file, tbname_crime_mod)
-    #    df_features = create_features(df_crime)
-    #   write_to_db(database_file, df_features, tbname_feature)
 
     df_crime_ml = read_sql(database_file, tbname_feature)
 

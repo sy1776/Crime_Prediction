@@ -1,4 +1,4 @@
-from import_clean_data import run_import_clean
+from import_data import run_import
 from manipulate_data import run_manipulate_data
 from exp_smoothing_model import run_es_model
 from ml_models import run_ml_models
@@ -14,10 +14,10 @@ def main():
         print("______________________________________________")
         print("")
 
-    run_import_clean()
-    #run_manipulate_data()
+    run_import()
+    run_manipulate_data()
     #run_es_model()
-    #run_ml_models()
+    run_ml_models()
     #run_preidct()
 
     duration = time.time() - start_time
