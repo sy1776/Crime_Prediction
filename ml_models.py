@@ -1,5 +1,4 @@
 from utils import read_sql, write_to_db, exists_table, save_model, plot_cm, plot_grouped_bar, drop_table, read_csv
-from manipulate_data import create_features
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC, SVC
@@ -34,10 +33,10 @@ def logistic_regression_pred(X_train, Y_train, X_test):
 def svm_pred(X_train, Y_train, X_test):
     # train a SVM classifier using X_train and Y_train. Use this to predict labels of X_train
     # use default params for the classifier
-    scaler = StandardScaler()
-    scaler.fit(X_train)
-    x_train = scaler.transform(X_train)
-    x_test = scaler.transform(X_test)
+    #scaler = StandardScaler()
+    #scaler.fit(X_train)
+    #x_train = scaler.transform(X_train)
+    #x_test = scaler.transform(X_test)
     #model = LinearSVC(random_state=RANDOM_STATE)
     model = SVC(gamma='auto')
     model.fit(X_train, Y_train)
@@ -134,6 +133,10 @@ def run_ml_models():
     # data in 2019 will be test set. Remove a first column which is occur_year
     train = df_crime_ml[(df_crime_ml['Occur_Year'] < 2019 )]
     test = df_crime_ml[(df_crime_ml['Occur_Year'] >= 2019 )]
+    # Drop the feature, 'Occur_Year' since we do not need
+    train = train.drop('Occur_Year', axis=1)
+    test = test.drop('Occur_Year', axis=1)
+
     X_train = train.iloc[:, 1:-1]
     Y_train = train.iloc[:, -1]
     X_test = test.iloc[:, 1:-1]

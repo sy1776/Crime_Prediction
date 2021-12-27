@@ -9,6 +9,7 @@ pd.set_option('display.width', WIDTH)
 #np.set_printoption(linewidth=desired_width)
 pd.set_option('display.max_columns',None)
 pd.set_option('display.max_rows',None)
+
 #City of ATL police department redraws the zone and beat in order to improve their response time and ensure their coverage
 #The change has been made effective of March 17, 2019. Since our data consists of data from 2009, we will need to manually
 #reassign beat values to those affected neighborhoods
@@ -23,18 +24,11 @@ def reassign_beats(df_old):
 
 def create_features(crime):
     #create a map for crime type
-    """"
-    type_map = {'crime_type_id': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                 'UCR_Literal': ['AGG ASSAULT', 'AUTO THEFT', 'BURGLARY-NONRES', 'BURGLARY-RESIDENCE','HOMICIDE', 'LARCENY-FROM VEHICLE', 'LARCENY-NON VEHICLE',
-                               'MANSLAUGHTER', 'ROBBERY-COMMERCIAL', 'ROBBERY-PEDESTRIAN', 'ROBBERY-RESIDENCE']
-               }
-    """
     type_map = {'crime_type_id': [0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 6],
                  'UCR_Literal': ['AGG ASSAULT', 'AUTO THEFT', 'BURGLARY-NONRES', 'BURGLARY-RESIDENCE','HOMICIDE', 'LARCENY-FROM VEHICLE', 'LARCENY-NON VEHICLE',
                                'MANSLAUGHTER', 'ROBBERY-COMMERCIAL', 'ROBBERY-PEDESTRIAN', 'ROBBERY-RESIDENCE']
                }
     time_of_day_map = {'time_of_day_id': [0, 1, 2, 3],
-                       #'Time_of_day': ['Early Morning', 'Morning', 'Afternoon', 'Evening'] #49,735 records for Early_Morning is disregarded. Total recs: 272,569 vs 322,256
                        'Time_of_day': ['Early_Morning', 'Morning', 'Afternoon', 'Evening']
                        }
     if VERBOSE:
@@ -108,17 +102,18 @@ def encode_categorical_data(df):
 def transform_clean_data(db_file, tbname_crime_mod, df_raw):
     #Remove a first record that is basically a header of raw file
     df = df_raw[1:len(df_raw)]
-    print("df.head(2) = ", df.head(2))
 
-    print(" ")
-    print("Before filtering, total instances = ", df.shape[0])
+    if VERBOSE:
+        print(" ")
+        print("Before filtering, total instances = ", df.shape[0])
 
     # Create a feature, 'Time_of_day' using 'Occur_time'
     df = df.assign(Time_of_day = df.apply(timeOfDay, axis=1))
 
     # Remove undefined time_of_day
     df = df[df.Time_of_day != 'Undefined']
-    print("After filtering 'Undefined' time of day, total instances = ", df.shape[0])
+    if VERBOSE:
+        print("After filtering 'Undefined' time of day, total instances = ", df.shape[0])
 
     # Create a feature, 'Occur_year' and 'Occur_month' using 'Occur_date'
     df["Occur_Year"] = df.apply(year, axis=1)
@@ -126,13 +121,16 @@ def transform_clean_data(db_file, tbname_crime_mod, df_raw):
 
     # filter case before 2009, blank neighborhood
     df = df[df.Occur_Year > 2008]
-    print("After filtering a year older than 2009, total instances = ", df.shape[0])
+    if VERBOSE:
+        print("After filtering a year older than 2009, total instances = ", df.shape[0])
     df = df[df.Neighborhood != '']
-    print("After filtering a neighborhood, total instances = ", df.shape[0])
+    if VERBOSE:
+        print("After filtering a neighborhood, total instances = ", df.shape[0])
 
     # Drop beat that is null
     df = df.loc[df['Beat'] != '']
-    print("after filtering 'Beat' that is null, total instances = ", df.shape[0])
+    if VERBOSE:
+        print("after filtering 'Beat' that is null, total instances = ", df.shape[0])
     # Reassign Beat
     df_new = reassign_beats(df)
 
@@ -143,7 +141,8 @@ def transform_clean_data(db_file, tbname_crime_mod, df_raw):
     # Create a feature, crime_type
     df_new["Crime_type"] = df_new.apply(gen_crime_type, axis=1)
     df = df[df.Crime_type != '']
-    print("After filtering a crime type, total instances = ", df.shape[0])
+    if VERBOSE:
+        print("After filtering a crime type, total instances = ", df.shape[0])
 
     # Convert Occur_Date to datetime
     df["Occur_Date"] = pd.to_datetime(df["Occur_Date"], format='%Y-%m-%d', errors='ignore')

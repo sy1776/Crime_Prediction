@@ -7,14 +7,12 @@
      c. manipulate_data.py - cleans and transforms the data from crime_raw table.
         creates the train data consisting of features that matters from crime_mod table. Transforms categorical values
         into numerical values that will be fed into ML models. 
-     c. exp_smoothing_model.py - performs an exponential smoothing on the data from crime_mod table and writes output to database.
      d. ml_models.py - creates a feature data from crime_mod and trains the data with Machine Learning classifiers and then,
         trained models are saved into the same folder and output of classification score is saved to database.
-     e. predict.py - loads trained models and predicts 2,016 real data with those models and predicted outcome is saved to database.
-
+     e. utils.py - imports the data from csv file. returns data from the database. plots the result
 
 2. INSTALLATION
-  System Requirement: following libraries are needed for python codes: Panda, Numpy, seaborn, matplotlib, scikit-learn, statsmodels.
+  System Requirement: following libraries are needed for python codes: Panda, Numpy, seaborn, matplotlib, scikit-learn, sqlalchemy, sqlite3, pickle.
   The code was developed and tested with Python 3.7 or higher.
   a.  Clone the code
   
@@ -30,6 +28,4 @@
      It will execute below scripts in following order:
       import_data.py
       manipulate_data.py 
-      exp_smoothing_model.py
       ml_models.py
-      predict.py
