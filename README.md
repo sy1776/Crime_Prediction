@@ -36,3 +36,8 @@ Python code, <tt>import_data.py</tt> which is a first module that gets executed 
 After cleaning data and data engineering/transforming, modified data will be written to 'crime_mod' and 'ml_feature'.
 
 Note that SQLite library does not need to be installed on the machine for above codes to be run.
+
+==How to install and execute==  
+
+Please refer to CODE_INFO.txt
+

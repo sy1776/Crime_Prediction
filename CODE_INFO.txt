@@ -24,7 +24,9 @@
 
 3. EXECUTION
   1) Ensure that data file, "COBRA-2009-2019.csv" is in the same folder
-  2) Run a wrapper script, "main.py" like this - "python main.py"
+  2) Run a wrapper script, "main.py" like this - "python main.py" on command line.
+     or
+     Run a wrapper script, "main.py" in Python editor like Pycharm.
      It will execute below scripts in following order:
       import_data.py
       manipulate_data.py 
