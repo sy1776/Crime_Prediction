@@ -32,7 +32,7 @@ Fortunately, there are numerous police departments in America that provides the 
 				      
 * Run ML Models: Two different Decision Trees (Gini Index, Information Gain), K-NN, Logistic Regression were performed via <tt>ml_models.py</tt> using scikit-learn lib.
 
-Python code, import_data.py which is a first module that gets executed will import the raw data into 'crime_raw' table in the sqlite database.
+Python code, <tt>import_data.py</tt> which is a first module that gets executed will import the raw data into 'crime_raw' table in the sqlite database.
 After cleaning data and data engineering/transforming, modified data will be written to 'crime_mod' and 'ml_feature'.
 
 Note that SQLite library does not need to be installed on the machine for above codes to be run.
